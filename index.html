@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 with Handlebars.js template</title>
+  <link rel="stylesheet" href="template/adminlte.min.css">
+  <link rel="stylesheet" href="template/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="template/fonts/ionicons.css">
+  <link rel="stylesheet" href="template/fonts/source-sans-pro.css">
+</head>
+<body class="sidebar-mini layout-fixed layout-navbar-fixed" onload="start_app();">
+  <div id="page" class="wrapper"></div>
+  <script src="template/handlebars.min-v4.7.6.js"></script>
+  <script src="template/jquery.min.js"></script>
+  <script src="template/jquery-ui.min.js"></script>
+  <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+  <script>
+    $.widget.bridge('uibutton', $.ui.button)
+  </script>
+  <script src="template/bootstrap.bundle.min.js"></script>
+  <script src="template/adminlte.min.js"></script>
+  <script src="template/renderer.js"></script>
+  <script src="app.js"></script>
+  
+  <script id="tpl-page" type="text/x-handlebars-template">
+    <nav id="navbar" class="main-header navbar navbar-expand navbar-{{#if navbar.color}}{{navbar.color}}{{else}}white{{/if}} navbar-{{#if navbar.dark}}dark{{else}}light{{/if}}">
+      {{>navbar navbar}}
+    </nav>
+    <aside id="sidebar" class="main-sidebar sidebar-{{#if sidebar.dark}}dark{{else}}light{{/if}}-{{#if sidebar.color}}{{sidebar.color}}{{else}}primary{{/if}}">
+      {{>sidebar sidebar}}
+    </aside>
+    <div id="content" class="content-wrapper">
+      {{>content content}}
+    </div>
+    <footer id="footer" class="main-footer">
+      {{>footer footer}}
+    </footer>
+  </script>
+  
+  <script id="tpl-navbar" type="text/x-handlebars-template">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      {{#each items}}
+        {{>navbar_nav_item this}}
+      {{/each}}
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      {{#each items_right}}
+        {{>navbar_nav_item this}}
+      {{/each}}
+    </ul>
+  </script>
+  
+  <script id="tpl-navbar-nav-item" type="text/x-handlebars-template">
+    <li class="nav-item {{#if dropdown}}dropdown{{/if}}">
+      {{#if (or target (or search fullscreen))}}<a href="{{#if target}}{{{target}}}{{else}}#{{/if}}"{{else}}<span{{/if}} class="nav-link" {{#if search}}data-widget="navbar-search" role="button"{{/if}} {{#if dropdown}}data-toggle="dropdown"{{/if}} {{#if fullscreen}}data-widget="fullscreen" role="button"{{/if}}>
+        {{>icon this}}
+        {{#if badge}}
+          <span class="badge navbar-badge badge-{{#if badge.color}}{{badge.color}}{{else}}secondary{{/if}}">{{badge.label}}</span>
+        {{/if}}
+        {{label}}
+      {{#if (or target (or search fullscreen))}}</a>{{else}}</span>{{/if}}
+      {{#if search}}
+        <div class="navbar-search-block">
+          <form {{#if search.id}}id="{{search.id}}"{{/if}} class="form-inline" {{#if search.target}}onsubmit="{{search.target}}(event);"{{/if}}>
+            <div class="input-group input-group-sm">
+              <input {{#if search.id}}id="{{search.id}}-input"{{/if}} class="form-control form-control-navbar" type="search" placeholder="{{search.placeholder}}" aria-label="{{search.placeholder}}">
+              <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                  {{>icon this}}
+                </button>
+                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      {{/if}}
+      {{#if dropdown}}
+        {{>navbar_dropdown dropdown}}
+      {{/if}}
+    </li>
+  </script>
+  
+  <script id="tpl-navbar-dropdown" type="text/x-handlebars-template">
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+      {{#if header}}
+        {{#if header.target}}<a href="{{{header.target}}}"{{else}}<span{{/if}} class="dropdown-item dropdown-header">{{header.label}}{{#if header.target}}</a>{{else}}</span>{{/if}}
+        <div class="dropdown-divider"></div>
+      {{/if}}
+      {{#each items}}
+        {{#if target}}<a href="{{{target}}}"{{else}}<span{{/if}} class="dropdown-item">
+          {{label}}
+        {{#if target}}</a>{{else}}</span>{{/if}}
+        {{#unless @last}}
+          <div class="dropdown-divider"></div>
+        {{/unless}}
+      {{/each}}
+      {{#if footer}}
+        {{#if items.length}}
+          <div class="dropdown-divider"></div>
+        {{/if}}
+        {{#if footer.target}}<a href="{{{footer.target}}}"{{else}}<span{{/if}} class="dropdown-item dropdown-footer">{{footer.label}}{{#if footer.target}}</a>{{else}}</span>{{/if}}
+      {{/if}}
+    </div>
+  </script>
+
+  <script id="tpl-sidebar" type="text/x-handlebars-template">
+    {{#if (or logo title)}}
+      <a href="{{#if brand_target}}{{brand_target}}{{else}}#{{/if}}" class="brand-link" style="border-right: 1px solid #dee2e6;">
+        {{#if logo}}<img src="{{{logo}}}" class="brand-image img-circle">{{/if}}
+        {{#if title}}<span class="brand-text font-weight-light">{{title}}</span>{{/if}}
+      </a>
+    {{/if}}
+    <div class="sidebar" style="border-right: 1px solid #dee2e6;">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar {{#each style}}nav-{{this}} {{/each}} flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          {{>sidebar_nav items}}
+        </ul>
+      </nav>
+    </div>
+  </script>
+
+  <script id="tpl-sidebar-nav" type="text/x-handlebars-template">
+    {{#each this}}
+      {{#if header}}
+        <li class="nav-header">{{uppercase label}}</li>
+      {{else}}
+        {{>sidebar_nav_item this}}
+      {{/if}}
+    {{/each}}
+  </script>
+  
+  <script id="tpl-sidebar-nav-item" type="text/x-handlebars-template">
+    <li class="nav-item {{#if open}}menu-open{{/if}}">
+      <a href="{{#if target}}{{{target}}}{{else}}#{{/if}}" class="nav-link {{#if active}}active{{/if}}">
+        {{>icon this}}
+        <p class="text {{#if text_color}}text-{{text_color}}{{/if}}">
+          {{label}}
+          {{#if badge}}
+            <span class="right badge badge-{{#if badge.color}}{{badge.color}}{{else}}secondary{{/if}}">{{badge.label}}</span>
+          {{/if}}
+          {{#if items}}
+            <i class="right fas fa-angle-left"></i>
+          {{/if}}
+        </p>
+      </a>
+      {{#if items}}
+        <ul class="nav nav-treeview">
+          {{>sidebar_nav items}}
+        </ul>
+      {{/if}}
+    </li>
+  </script>
+  
+  <script id="tpl-content" type="text/x-handlebars-template">
+    {{#if header}}
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">{{header.title}}</h1>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  {{#each header.breadcrumbs}}
+                    <li class="breadcrumb-item {{#if @last}}active{{/if}}">{{#if target}}<a href="{{{target}}}">{{/if}}{{label}}{{#if target}}</a>{{/if}}</li>
+                  {{/each}}
+                </ol>
+              </div>
+            </div>
+          </div>
+      </div>
+    {{/if}}
+    {{#if content}}
+      <div class="content">
+        {{#each content}}
+          {{>content_row}}
+        {{/each}}
+      </div>
+    {{/if}}
+  </script>
+  
+  <script id="tpl-content-row" type="text/x-handlebars-template">
+      <div class="row">
+        {{#each this}}
+          {{>content_column}}
+        {{/each}}
+      </div>
+  </script>
+
+  <script id="tpl-content-column" type="text/x-handlebars-template">
+    <div class="col-{{#if width}}{{width}}{{else}}12{{/if}}">
+      {{>content_element content}}
+    </div>
+  </script>
+  
+  <script id="tpl-content-element" type="text/x-handlebars-template">
+    {{#if (list this)}}
+      {{#each this}}
+        {{>content_element_inner this}}
+      {{/each}}
+    {{else}}
+      {{>content_element_inner this}}
+    {{/if}}
+  </script>
+  
+  <script id="tpl-content-element-inner" type="text/x-handlebars-template">
+    {{#if type}}
+      {{#if (eq type "paragraph")}}
+        <p>{{content}}</p>
+      {{else if (eq type "separator")}}
+          &nbsp;
+      {{else if (eq type "card")}}
+        {{>card content}}
+      {{else if (eq type "flexbox")}}
+        {{>flexbox content}}
+      {{else}}
+        {{log "Unknown content element type:" type level="error"}}
+      {{/if}}
+    {{else}}
+      {{content}}
+    {{/if}}
+  </script>
+  
+  <script id="tpl-footer" type="text/x-handlebars-template">
+    {{content}}
+    {{#if content_right}}<div class="float-right">{{content_right}}</div>{{/if}}
+  </script>
+
+  <script id="tpl-icon" type="text/x-handlebars-template">
+    {{#if icon}}<i class="nav-icon {{#unless icon_style}}fas{{else}}{{icon_style}}{{/unless}} fa-{{icon}} {{#if icon_color}}text-{{icon_color}}{{/if}}"></i>{{else}}<i class="nav-icon"></i>{{/if}}
+  </script>
+
+  <script id="tpl-card" type="text/x-handlebars-template">
+    <div class="card">
+      {{#if header}}
+        <div class="card-header border-{{#if border}}{{border}}{{else}}0{{/if}}">
+          <div class="d-flex justify-content-between">
+            {{#if header.title}}<h3 class="card-title">{{header.title}}</h3>{{/if}}
+            {{#each header.links}}
+              {{#if target}}<a href="{{{target}}}"{{else}}<span{{/if}}>
+                {{>icon this}}
+                {{label}}
+              {{#if target}}</a>{{else}}</span>{{/if}}
+            {{/each}}
+            {{#if header.tools}}
+              <div class="card-tools">
+                {{#each header.tools}}
+                  {{#if target}}<a href="{{{target}}}"{{else}}<span{{/if}} class="btn btn-tool btn-sm">
+                    {{>icon this}}
+                    {{label}}
+                  {{#if target}}</a>{{else}}</span>{{/if}}
+                {{/each}}
+              </div>
+            {{/if}}
+          </div>
+        </div>
+      {{/if}}
+      {{#if content}}
+      <div class="card-body {{#if padding}}p-{{padding}}{{/if}}">
+        {{#each content}}
+          {{>content_element this}}
+        {{/each}}
+      </div>
+      {{/if}}
+    </div>
+  </script>
+
+  <script id="tpl-flexbox" type="text/x-handlebars-template">
+    <div class="d-{{#if inline}}inline-{{/if}}flex {{#if type}}flex-{{type}}{{/if}} {{#if justify}}justify-content-{{justify}}{{/if}} {{#if align_items}}align-items-{{align_items}}{{/if}} {{#if align_self}}align-self-{{align_self}}{{/if}}" {{#if align_text}}text-{{align_text}}{{/if}}">
+      {{>content_element content}}
+    </div>
+  </script>
+</body>
+</html>
