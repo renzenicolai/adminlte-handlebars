@@ -71,6 +71,7 @@ class App {
             },
             sidebar: {
                 logo: "logo.webp",
+                circle: true,
                 title: "Handlebars template",
                 style: [
                     //"flat",
@@ -82,7 +83,7 @@ class App {
                     {
                         label: "Example item",
                         icon: "chart-pie",
-                        target: "https://google.com",
+                        target: "javascript:app.dialog();",
                         icon_color: "danger",
                         text_color: "warning"
                     },
@@ -365,7 +366,7 @@ class App {
                                         ]
                                     },
                                     form: {
-                                        onsubmit: "alert('Form submitted!');"
+                                        target: "javascript:alert('Form submitted!');"
                                     },
                                     content: [
                                         {
@@ -723,6 +724,300 @@ class App {
         } else {
             alert("Form submitted: " + event.srcElement.id);
         }
+    }
+    
+    dialog() {
+        let content = {
+            id: "example-dialog",
+            header: {
+                content: [
+                    {
+                        type: "title",
+                        card: true,
+                        content: "Form elements"
+                    }
+                ]
+            },
+            form: {
+                target: "javascript:alert('Form submitted!');"
+            },
+            content: [
+                {
+                    type: "input",
+                    content: {
+                        type: "hidden",
+                        value: "Value",
+                        id: "hiddeninput1"
+                    }
+                },
+                {
+                    type: "form-group",
+                    label: "Text input",
+                    content: {
+                        type: "input",
+                        content: {
+                            type: "text",
+                            placeholder: "Placeholder",
+                            value: "Value",
+                            id: "textinput1"
+                        }
+                    }
+                },
+                {
+                    type: "form-group",
+                    label: "Disabled text input",
+                    content: {
+                        type: "input",
+                        content: {
+                            type: "text",
+                            placeholder: "Placeholder",
+                            value: "Value",
+                            id: "textinput2",
+                            disabled: true
+                        }
+                    }
+                },
+                {
+                    type: "form-group",
+                    label: "Success text input",
+                    content: {
+                        type: "input",
+                        content: {
+                            type: "text",
+                            placeholder: "Placeholder",
+                            value: "Value",
+                            id: "textinput3",
+                            valid: true
+                        }
+                    }
+                },
+                {
+                    type: "form-group",
+                    label: "Warning text input",
+                    content: {
+                        type: "input",
+                        content: {
+                            type: "text",
+                            placeholder: "Placeholder",
+                            value: "Value",
+                            id: "textinput4",
+                            warning: true
+                        }
+                    }
+                },
+                {
+                    type: "form-group",
+                    label: "Invalid text input",
+                    content: {
+                        type: "input",
+                        content: {
+                            type: "text",
+                            placeholder: "Placeholder",
+                            value: "Value",
+                            id: "textinput5",
+                            invalid: true
+                        }
+                    }
+                },
+                {
+                    type: "form-group",
+                    label: "Text input with addons",
+                    content: {
+                        type: "input-group",
+                        content: [
+                            {
+                                type: "input-prepend",
+                                content: {
+                                    content: "Front",
+                                    icon: "envelope"
+                                }
+                            },
+                            {
+                                type: "input",
+                                content: {
+                                    type: "text",
+                                    placeholder: "Placeholder",
+                                    value: "Value",
+                                    id: "textinput6"
+                                }
+                            },
+                            {
+                                type: "input-append",
+                                content: {
+                                    content: "Back",
+                                    icon: "check"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    type: "form-group",
+                    label: "Password input",
+                    content: {
+                        type: "input",
+                        content: {
+                            type: "password",
+                            placeholder: "Placeholder",
+                            value: "Value",
+                            id: "passwordinput1"
+                        }
+                    }
+                },
+                {
+                    type: "form-group",
+                    label: "Text area",
+                    content: {
+                        type: "input",
+                        content: {
+                            type: "textarea",
+                            placeholder: "Placeholder",
+                            value: "Value",
+                            id: "textarea1",
+                            rows: 4
+                        }
+                    }
+                },
+                {
+                    type: "form-group",
+                    label: "Checkbox input",
+                    content: {
+                        type: "input",
+                        content: {
+                            type: "checkbox",
+                            value: true,
+                            id: "checkbox1",
+                            label: "Checkbox label"
+                        }
+                    }
+                },
+                {
+                    type: "form-group",
+                    label: "Radio buttons",
+                    content: [
+                        {
+                            type: "input",
+                            content: {
+                                type: "radio",
+                                value: false,
+                                id: "radio1",
+                                name: "radioGroup1",
+                                label: "Radio input A",
+                            }
+                        },
+                        {
+                            type: "input",
+                            content: {
+                                type: "radio",
+                                value: true,
+                                id: "radio2",
+                                name: "radioGroup1",
+                                label: "Radio input B",
+                            }
+                        },
+                        {
+                            type: "input",
+                            content: {
+                                type: "radio",
+                                value: false,
+                                id: "radio3",
+                                name: "radioGroup1",
+                                label: "Radio input C",
+                            }
+                        }
+                    ]
+                },
+                {
+                    type: "form-group",
+                    label: "Select",
+                    content: {
+                        type: "input",
+                        content: {
+                            type: "select",
+                            id: "select1",
+                            value: "c",
+                            options: {
+                                "a": "Option A",
+                                "b": "Option B",
+                                "c": "Option C",
+                            }
+                        }
+                    }
+                },
+                {
+                    type: "form-group",
+                    label: "Select multiple",
+                    content: {
+                        type: "input",
+                        content: {
+                            type: "select",
+                            id: "select2",
+                            multiple: true,
+                            value: ["b", "c"],
+                            options: {
+                                "a": "Option A",
+                                "b": "Option B",
+                                "c": "Option C",
+                            }
+                        }
+                    }
+                },
+            ],
+            footer: {
+                content: [,
+                    {
+                        type: "button",
+                        target: "app.renderer.modal_remove(\"example-dialog\");",
+                        label: "Close",
+                        color: "secondary"
+                    },
+                    {
+                        type: "button",
+                        submit: true,
+                        label: "Submit",
+                        color: "primary"
+                    }
+                ]
+            }
+        };
+        this.renderer.modal_add(content);
+        this.renderer.modal_show(content.id);
+    }
+
+    dialog2() {
+        let content = {
+            id: "example-dialog-2",
+            header: {
+                content: [
+                    {
+                        type: "title",
+                        card: true,
+                        content: "Form elements"
+                    }
+                ]
+            },
+            form: {
+                target: "javascript:alert('Form submitted!');"
+            },
+            content: [
+                {
+                    type: "paragraph",
+                    content: "Hello world!"
+                }
+            ],
+            footer: {
+                content: [,
+                    {
+                        type: "button",
+                        target: "app.renderer.modal_remove(\"example-dialog-2\");",
+                        label: "Close",
+                        color: "secondary"
+                    }
+                ]
+            }
+        };
+        this.renderer.modal_add(content);
+        this.renderer.modal_show(content.id);
     }
 }
 

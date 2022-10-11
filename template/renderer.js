@@ -71,6 +71,7 @@ class Renderer {
         Handlebars.registerPartial("content_element_inner", document.getElementById("tpl-content-element-inner").innerHTML);
         Handlebars.registerPartial("icon", document.getElementById("tpl-icon").innerHTML);
         Handlebars.registerPartial("link", document.getElementById("tpl-link").innerHTML);
+        Handlebars.registerPartial("button", document.getElementById("tpl-button").innerHTML);
         Handlebars.registerPartial("card", document.getElementById("tpl-card").innerHTML);
         Handlebars.registerPartial("card_inner", document.getElementById("tpl-card-inner").innerHTML);
         Handlebars.registerPartial("flexbox", document.getElementById("tpl-flexbox").innerHTML);
@@ -127,37 +128,23 @@ class Renderer {
         document.getElementById('footer').innerHTML = this.templates["footer"](content);
     }
     
-    modal_add(content, identifier = null) {
-        if ((typeof identifier !== "number") && (typeof identifier !== "string")) {
-            if (typeof window.modal_incremental_identifier !== "number") {
-                window.modal_incremental_identifier = 0;
-            } else {
-                window.modal_incremental_identifier++;
-            }
-            identifier = window.modal_incremental_identifier;
-        }
-
-        document.getElementById('modals').innerHTML += this.templates["modal"]({
-            id: "dynamic-modal-" + String(identifier),
-            content: content
-        });
-        
-        return String(identifier);
+    modal_add(content = {}) {
+        document.getElementById('modals').innerHTML += this.templates["modal"](content);
     }
     
     modal_remove(identifier) {
         this.modal_hide(identifier);
         setTimeout(() => {
-            document.getElementById("dynamic-modal-" + String(identifier)).outerHTML = "";
+            document.getElementById(identifier).outerHTML = "";
         }, 200);
     }
     
     modal_update(identifier, content) {
-        document.getElementById("dynamic-modal-" + String(identifier)).innerHTML = this.templates["modal_inner"](content);
+        document.getElementById(identifier).innerHTML = this.templates["modal_inner"](content);
     }
     
     modal_show(identifier, allow_close = false) {
-        let element = $("#dynamic-modal-" + String(identifier));
+        let element = $("#" + String(identifier));
         if (allow_close) {
             element.modal("show");
         } else {
@@ -166,6 +153,6 @@ class Renderer {
     }
 
     modal_hide(identifier) {
-        $("#dynamic-modal-" + String(identifier)).modal("hide");
+        $("#" + String(identifier)).modal("hide");
     }
 }
